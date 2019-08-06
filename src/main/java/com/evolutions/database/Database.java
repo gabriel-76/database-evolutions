@@ -130,8 +130,8 @@ public interface Database {
    *
    * @return the database for scala API.
    */
-  public default  com.evolutions.database.teste.Database asScala() {
-    return new  com.evolutions.database.teste.Database() {
+  public default  com.evolutions.database.api.Database asScala() {
+    return new  com.evolutions.database.api.Database() {
       @Override
       public String name() {
         return Database.this.getName();
@@ -177,7 +177,7 @@ public interface Database {
       }
 
       public <A> A withTransaction(
-           com.evolutions.database.teste.TransactionIsolationLevel isolationLevel,
+           com.evolutions.database.api.TransactionIsolationLevel isolationLevel,
           final scala.Function1<Connection, A> block) {
         return Database.this.withTransaction(isolationLevel.asJava(), block::apply);
       }

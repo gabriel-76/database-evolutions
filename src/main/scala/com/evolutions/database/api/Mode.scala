@@ -1,4 +1,4 @@
-package com.evolutions.database.teste
+package com.evolutions.database.api
 
 /**
  * Application mode, either `Dev`, `Test`, or `Prod`.
@@ -12,6 +12,6 @@ object Mode {
   case object Test extends Mode(com.evolutions.database.Mode.TEST)
   case object Prod extends Mode(com.evolutions.database.Mode.PROD)
 
-  lazy val values: Set[com.evolutions.database.teste.Mode] = Set(Dev, Test, Prod)
+  lazy val values: Set[com.evolutions.database.api.Mode] = Set(Dev, Test, Prod)
 }
 

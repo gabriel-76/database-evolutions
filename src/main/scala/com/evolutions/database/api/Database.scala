@@ -2,7 +2,7 @@
  * Copyright (C) 2009-2019 Lightbend Inc. <https://www.lightbend.com>
  */
 
-package com.evolutions.database.teste
+package com.evolutions.database.api
 
 import java.sql.Connection
 

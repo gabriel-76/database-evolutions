@@ -4,7 +4,7 @@
 
 package com.evolutions.database;
 
-import  com.evolutions.database.teste.TransactionIsolationLevel$;
+import  com.evolutions.database.api.TransactionIsolationLevel$;
 
 import java.sql.Connection;
 
@@ -31,7 +31,7 @@ public enum TransactionIsolationLevel {
     return id;
   }
 
-  public  com.evolutions.database.teste.TransactionIsolationLevel asScala() {
+  public  com.evolutions.database.api.TransactionIsolationLevel asScala() {
     return TransactionIsolationLevel$.MODULE$.apply(id);
   }
 

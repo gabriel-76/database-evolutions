@@ -1,4 +1,4 @@
-package com.evolutions.database.teste
+package com.evolutions.database.api
 
 import org.springframework.beans.factory.annotation.{Autowired, Value}
 import org.springframework.stereotype.Service

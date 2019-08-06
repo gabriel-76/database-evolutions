@@ -6,9 +6,7 @@ package com.evolutions.database;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import  com.evolutions.database.teste.Scala;
+import  com.evolutions.database.api.Scala;
 
 import java.util.List;
 import java.util.Map;
@@ -16,17 +14,17 @@ import java.util.Map;
 /** Default delegating implementation of the DB API. */
 public class DefaultDBApi implements DBApi {
 
-  private com.evolutions.database.teste.DBApi dbApi;
+  private com.evolutions.database.api.DBApi dbApi;
   private List<Database> databases;
   private Map<String, Database> databaseByName;
 
-  public DefaultDBApi(com.evolutions.database.teste.DBApi dbApi) {
+  public DefaultDBApi(com.evolutions.database.api.DBApi dbApi) {
     this.dbApi = dbApi;
 
     ImmutableList.Builder<Database> databases = new ImmutableList.Builder<Database>();
     ImmutableMap.Builder<String, Database> databaseByName =
         new ImmutableMap.Builder<String, Database>();
-    for ( com.evolutions.database.teste.Database db : Scala.asJava(dbApi.databases())) {
+    for ( com.evolutions.database.api.Database db : Scala.asJava(dbApi.databases())) {
       Database database = new DefaultDatabase(db);
       databases.add(database);
       databaseByName.put(database.getName(), database);

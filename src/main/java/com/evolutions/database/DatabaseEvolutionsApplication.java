@@ -1,11 +1,10 @@
 package com.evolutions.database;
 
-import com.evolutions.database.teste.DefaultEvolutionsApi;
-import com.evolutions.database.teste.GreetingInScala;
-import com.evolutions.database.teste.Reader;
-import com.evolutions.database.teste.ResourceEvolutionsReader;
+import com.evolutions.database.api.DefaultEvolutionsApi;
+import com.evolutions.database.api.GreetingInScala;
+import com.evolutions.database.api.Reader;
+import com.evolutions.database.api.ResourceEvolutionsReader;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

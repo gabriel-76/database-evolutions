@@ -1,4 +1,4 @@
-package com.evolutions.database.teste
+package com.evolutions.database.api
 
 /**
  * The generic database configuration.

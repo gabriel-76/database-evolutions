@@ -10,12 +10,12 @@ public enum Mode {
   TEST,
   PROD;
 
-  public com.evolutions.database.teste.Mode asScala() {
+  public com.evolutions.database.api.Mode asScala() {
     if (this == DEV) {
-      return com.evolutions.database.teste.Mode.Dev$.MODULE$;
+      return com.evolutions.database.api.Mode.Dev$.MODULE$;
     } else if (this == PROD) {
-      return com.evolutions.database.teste.Mode.Prod$.MODULE$;
+      return com.evolutions.database.api.Mode.Prod$.MODULE$;
     }
-    return com.evolutions.database.teste.Mode.Test$.MODULE$;
+    return com.evolutions.database.api.Mode.Test$.MODULE$;
   }
 }

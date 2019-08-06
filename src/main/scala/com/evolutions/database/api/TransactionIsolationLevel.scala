@@ -1,4 +1,4 @@
-package com.evolutions.database.teste
+package com.evolutions.database.api
 
 import java.sql.Connection
 

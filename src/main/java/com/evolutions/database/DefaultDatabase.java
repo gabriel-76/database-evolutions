@@ -4,21 +4,18 @@
 
 package com.evolutions.database;
 
-import com.typesafe.config.Config;
-import com.typesafe.config.ConfigFactory;
 import scala.runtime.AbstractFunction1;
 import scala.runtime.BoxedUnit;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
-import java.util.Map;
 
 /** Default delegating implementation of the database API. */
 public class DefaultDatabase implements Database {
 
-  private final  com.evolutions.database.teste.Database db;
+  private final  com.evolutions.database.api.Database db;
 
-  public DefaultDatabase( com.evolutions.database.teste.Database database) {
+  public DefaultDatabase( com.evolutions.database.api.Database database) {
     this.db = database;
   }
 

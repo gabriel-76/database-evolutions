@@ -4,7 +4,7 @@
 
 package com.evolutions.database;
 
-import com.evolutions.database.teste.Scala;
+import com.evolutions.database.api.Scala;
 import scala.compat.java8.OptionConverters;
 
 import java.io.File;
@@ -19,14 +19,14 @@ import java.util.Optional;
  */
 public class Environments {
   
-  private com.evolutions.database.teste.Environments env;
+  private com.evolutions.database.api.Environments env;
 
-  public Environments(com.evolutions.database.teste.Environments environments) {
+  public Environments(com.evolutions.database.api.Environments environments) {
     this.env = environments;
   }
 
   public Environments(File rootPath, ClassLoader classLoader, Mode mode) {
-    this(new  com.evolutions.database.teste.Environments());
+    this(new  com.evolutions.database.api.Environments());
   }
 
   public Environments(File rootPath, Mode mode) {
@@ -152,9 +152,9 @@ public class Environments {
    * The underlying Scala API Environment object that this Environment wraps.
    *
    * @return the environment
-   * @see  com.evolutions.database.teste.Environments
+   * @see  com.evolutions.database.api.Environments
    */
-  public  com.evolutions.database.teste.Environments asScala() {
+  public  com.evolutions.database.api.Environments asScala() {
     return env;
   }
 }
