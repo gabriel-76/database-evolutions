@@ -1,10 +1,6 @@
 package com.evolutions.database.api
 
-import org.springframework.beans.factory.annotation.{Autowired, Value}
 import org.springframework.stereotype.Service
-
-import scala.annotation.meta.beanSetter
-import scala.beans.BeanProperty
 
 @Service
 class DbScalaConfig () (

@@ -1,7 +1,6 @@
 package com.evolutions.database.api
 
-import java.io.InputStream
-import java.io.File
+import java.io.{File, InputStream}
 
 import org.springframework.stereotype.Service
 

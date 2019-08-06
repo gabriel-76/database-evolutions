@@ -8,7 +8,7 @@ import java.io.File
 import java.nio.charset.Charset
 import java.nio.file._
 
-import Codecs.sha1
+import com.evolutions.database.api.Codecs.sha1
 
 /**
  * An SQL evolution - database changes associated with a software version.

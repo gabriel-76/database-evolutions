@@ -4,8 +4,6 @@
 
 package com.evolutions.database.api
 
-import org.springframework.stereotype.Service
-
 /**
  * DB API for managing application databases.
  */

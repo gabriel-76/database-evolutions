@@ -4,7 +4,7 @@
 
 package com.evolutions.database;
 
-import  com.evolutions.database.api.TransactionIsolationLevel$;
+import com.evolutions.database.api.TransactionIsolationLevel$;
 
 import java.sql.Connection;
 

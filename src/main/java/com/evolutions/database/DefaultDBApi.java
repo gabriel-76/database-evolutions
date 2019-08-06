@@ -4,9 +4,9 @@
 
 package com.evolutions.database;
 
+import com.evolutions.database.api.Scala;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
-import  com.evolutions.database.api.Scala;
 
 import java.util.List;
 import java.util.Map;

@@ -4,14 +4,13 @@
 
 package com.evolutions.database.api
 
-import java.sql.{Connection, Driver, DriverManager}
+import java.sql.Connection
 
-import com.typesafe.config.Config
 import javax.sql.DataSource
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 
-import scala.util.control.{ControlThrowable, NonFatal}
+import scala.util.control.ControlThrowable
 
 /**
  * Creation helpers for manually instantiating databases.

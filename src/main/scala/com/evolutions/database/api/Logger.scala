@@ -7,13 +7,11 @@ package com.evolutions.database.api
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.atomic.AtomicInteger
 
-import org.slf4j.{ Logger => Slf4jLogger }
-import org.slf4j.LoggerFactory
-import org.slf4j.Marker
+import org.slf4j.{LoggerFactory, Marker, Logger => Slf4jLogger}
 
+import scala.collection.JavaConverters._
 import scala.collection.mutable
 import scala.language.implicitConversions
-import scala.collection.JavaConverters._
 
 /**
  * Typical logger interface.
