@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service
  * @param mode The mode of the application.
  */
 @Service
-case class Environments() {
+case class Environments () {
 
   val rootPath: File = new File("")
   val classLoader: ClassLoader = getClass.getClassLoader

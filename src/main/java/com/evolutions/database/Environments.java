@@ -5,6 +5,8 @@
 package com.evolutions.database;
 
 import com.evolutions.database.api.Scala;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import scala.compat.java8.OptionConverters;
 
 import java.io.File;

@@ -1,9 +1,6 @@
 package com.evolutions.database;
 
-import com.evolutions.database.api.DefaultEvolutionsApi;
-import com.evolutions.database.api.GreetingInScala;
-import com.evolutions.database.api.Reader;
-import com.evolutions.database.api.ResourceEvolutionsReader;
+import com.evolutions.database.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -19,7 +16,7 @@ import javax.sql.DataSource;
 public class DatabaseEvolutionsApplication {
 
 	@Autowired
-	private Config config;
+	private DbConfig config;
 
 	@Autowired
 	private JdbcTemplate jdbcTemplate;
@@ -39,6 +36,9 @@ public class DatabaseEvolutionsApplication {
 	@Autowired
 	private Reader reader;
 
+	@Autowired
+	private ApplicationEvolutions applicationEvolutions;
+
 	public static void main(String[] args) {
 		SpringApplication.run(DatabaseEvolutionsApplication.class, args);
 	}
@@ -47,35 +47,17 @@ public class DatabaseEvolutionsApplication {
 	public CommandLineRunner commandLineRunner(ApplicationContext ctx) {
 		return args -> {
 
-			System.out.println(dataSource.getConnection().getSchema());
-
-			System.out.println(config.getEnable());
-			System.out.println(config.getSchema());
-			System.out.println(config.getAutocommit());
-			System.out.println(config.getAutocouseLocks());
-			System.out.println(config.getAutoApply());
-			System.out.println(config.getAutoApplyDowns());
-			System.out.println(config.getSkipApplyDownsOnly());
-
-			var scripts = defaultEvolutionsApi.scripts("testedb", resourceEvolutionsReader ,"");
+//			var scripts = defaultEvolutionsApi.scripts("testedb", resourceEvolutionsReader ,"");
 
 //			var e = resourceEvolutionsReader.evolutions("");
 
-			defaultEvolutionsApi.evolve("testedb", scripts,true,"");
+//			defaultEvolutionsApi.evolve("testedb", scripts,true,"");
 
-			GreetingInScala greetingInScala = new GreetingInScala();
-			System.out.println(greetingInScala.greet());
-
-			System.out.println(jdbcTemplate.queryForObject("SELECT 1 = 1", Boolean.class));
-
-			jdbcTemplate.execute("CREATE TABLE t(id INTEGER, NOME VARCHAR)");
-			jdbcTemplate.execute("INSERT INTO t (id, nome) VALUES (1, 'hjdfashjdgshd')");
-
-			System.out.println(jdbcTemplate.queryForObject("SELECT nome FROM t WHERE id = 1", String.class));
+			applicationEvolutions.start();
 
 			System.out.println(jdbcTemplate.queryForList("SHOW TABLES"));
 
-			System.out.println(evolutionsReader.loadEvolutions().count());
+			System.out.println(jdbcTemplate.queryForList("SELECT * FROM PLAY_EVOLUTIONS"));
 
 		};
 	}

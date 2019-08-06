@@ -295,6 +295,10 @@ class MyDatabase(@Autowired private val ds: DataSource) extends Database {
     closeDataSource(dataSource)
   }
 
+  def databases(): Seq[Database] = {
+    Seq(this)
+  }
+
   /**
    * The configuration name for this database.
    */
