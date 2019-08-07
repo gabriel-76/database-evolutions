@@ -57,6 +57,8 @@ public class DatabaseEvolutionsApplication {
 
 			System.out.println(jdbcTemplate.queryForList("SHOW TABLES"));
 
+//			System.out.println(jdbcTemplate.queryForList("select * from information_schema.tables"));
+
 			System.out.println(jdbcTemplate.queryForList("SELECT * FROM PLAY_EVOLUTIONS"));
 
 		};

@@ -2,6 +2,8 @@ package com.evolutions.database.api
 
 import java.io.{File, InputStream}
 
+import com.evolutions.database.Config
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 
 /**
@@ -14,11 +16,11 @@ import org.springframework.stereotype.Service
  * @param mode The mode of the application.
  */
 @Service
-case class Environments () {
+case class Environments (@Autowired private val config: Config) {
 
   val rootPath: File = new File("")
   val classLoader: ClassLoader = getClass.getClassLoader
-  val mode: Mode = Mode.Dev
+  val mode: Mode = com.evolutions.database.Mode.valueOf(config.getMode.toUpperCase).asScala()
 
   /**
    * Retrieves a file relative to the application root path.
@@ -96,17 +98,4 @@ case class Environments () {
    */
   def asJava: com.evolutions.database.Environments = new com.evolutions.database.Environments(this)
 
-}
-
-object Environments {
-
-  /**
-   * A simple environment.
-   *
-   * Uses the same classloader that the environment classloader is defined in, and the current working directory as the
-   * path.
-   */
-  def simple(path: File = new File("."), mode: Mode = Mode.Test) =
-//    Environments(path, Environments.getClass.getClassLoader, mode)
-    Environments()
 }

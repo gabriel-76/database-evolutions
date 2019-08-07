@@ -72,8 +72,8 @@ trait EvolutionsApi {
   /**
    * Apply pending evolutions for the given database.
    */
-  def applyFor(dbName: String, path: File = new File("."), autocommit: Boolean = true, schema: String = ""): Unit = {
-    val scripts = this.scripts(dbName, new EnvironmentEvolutionsReader(Environments.simple(path = path)), schema)
+  def applyFor(dbName: String, path: File = new File("."), autocommit: Boolean = true, schema: String = "", reader: EvolutionsReader): Unit = {
+    val scripts = this.scripts(dbName, reader, schema)
     this.evolve(dbName, scripts, autocommit, schema)
   }
 }

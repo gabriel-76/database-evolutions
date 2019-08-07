@@ -27,21 +27,21 @@ public class Environments {
     this.env = environments;
   }
 
-  public Environments(File rootPath, ClassLoader classLoader, Mode mode) {
-    this(new  com.evolutions.database.api.Environments());
-  }
-
-  public Environments(File rootPath, Mode mode) {
-    this(rootPath, Environments.class.getClassLoader(), mode);
-  }
-
-  public Environments(File rootPath) {
-    this(rootPath, Environments.class.getClassLoader(), Mode.TEST);
-  }
-
-  public Environments(Mode mode) {
-    this(new File("."), Environments.class.getClassLoader(), mode);
-  }
+//  public Environments(File rootPath, ClassLoader classLoader, Mode mode) {
+//    this(new com.evolutions.database.api.Environments());
+//  }
+//
+//  public Environments(File rootPath, Mode mode) {
+//    this(rootPath, Environments.class.getClassLoader(), mode);
+//  }
+//
+//  public Environments(File rootPath) {
+//    this(rootPath, Environments.class.getClassLoader(), Mode.TEST);
+//  }
+//
+//  public Environments(Mode mode) {
+//    this(new File("."), Environments.class.getClassLoader(), mode);
+//  }
 
   /**
    * The root path that the application is deployed at.
@@ -146,9 +146,9 @@ public class Environments {
    *
    * @return the environment
    */
-  public static Environments simple() {
-    return new Environments(new File("."), Environments.class.getClassLoader(), Mode.TEST);
-  }
+//  public static Environments simple() {
+//    return new Environments(new File("."), Environments.class.getClassLoader(), Mode.TEST);
+//  }
 
   /**
    * The underlying Scala API Environment object that this Environment wraps.
