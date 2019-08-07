@@ -4,9 +4,7 @@
 
 package com.evolutions.database;
 
-import com.evolutions.database.api.Scala;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import com.evolutions.database.play.util.Scala;
 import scala.compat.java8.OptionConverters;
 
 import java.io.File;
@@ -21,9 +19,9 @@ import java.util.Optional;
  */
 public class Environments {
   
-  private com.evolutions.database.api.Environments env;
+  private com.evolutions.database.play.Environments env;
 
-  public Environments(com.evolutions.database.api.Environments environments) {
+  public Environments(com.evolutions.database.play.Environments environments) {
     this.env = environments;
   }
 
@@ -154,9 +152,9 @@ public class Environments {
    * The underlying Scala API Environment object that this Environment wraps.
    *
    * @return the environment
-   * @see  com.evolutions.database.api.Environments
+   * @see  com.evolutions.database.play.Environments
    */
-  public  com.evolutions.database.api.Environments asScala() {
+  public  com.evolutions.database.play.Environments asScala() {
     return env;
   }
 }

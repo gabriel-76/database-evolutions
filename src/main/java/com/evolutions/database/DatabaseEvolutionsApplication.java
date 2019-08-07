@@ -1,6 +1,11 @@
 package com.evolutions.database;
 
-import com.evolutions.database.api.*;
+import com.evolutions.database.config.DbConfig;
+import com.evolutions.database.evolutions.EvolutionsReader;
+import com.evolutions.database.play.Reader;
+import com.evolutions.database.play.evolutions.ApplicationEvolutions;
+import com.evolutions.database.play.evolutions.DefaultEvolutionsApi;
+import com.evolutions.database.play.evolutions.ResourceEvolutionsReader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
