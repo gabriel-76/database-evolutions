@@ -8,6 +8,8 @@ import java.io._
 import java.net.URL
 import java.nio.file.{Files, Path}
 
+import org.slf4j.LoggerFactory
+
 import scala.io.Codec
 
 /**
@@ -17,7 +19,7 @@ import scala.io.Codec
  */
 private object PlayIO {
 
-  private val logger = Logger(this.getClass)
+  private val logger = LoggerFactory.getLogger(this.getClass)
 
   /**
    * Read the given stream into a byte array.

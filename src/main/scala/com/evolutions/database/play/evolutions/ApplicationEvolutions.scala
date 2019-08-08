@@ -11,6 +11,7 @@ import com.evolutions.database.exceptions.PlayException
 import com.evolutions.database.play._
 import com.evolutions.database.play.db.{Database, MyDatabase}
 import com.evolutions.database.play.evolutions.DatabaseUrlPatterns._
+import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 
@@ -28,7 +29,7 @@ class ApplicationEvolutions(
     @Autowired private val config: DbConfig
 ) {
 
-  private val logger = Logger(classOf[ApplicationEvolutions])
+  private val logger = LoggerFactory.getLogger(classOf[ApplicationEvolutions])
 
   private var invalidDatabaseRevisions = 0
 
@@ -62,8 +63,14 @@ class ApplicationEvolutions(
             }
 
             environments.mode match {
-              case Mode.Test => evolutions.evolve(db, scripts, autocommit, schema)
-              case Mode.Dev =>  evolutions.evolve(db, scripts, autocommit, schema)
+              case Mode.Test => {
+                logger.warn("Apply evolutions in database")
+                evolutions.evolve(db, scripts, autocommit, schema)
+              }
+              case Mode.Dev =>  {
+                logger.warn("Apply evolutions in database")
+                evolutions.evolve(db, scripts, autocommit, schema)
+              }
               case Mode.Prod if !hasDown && dbConfig.getAutoApply => evolutions.evolve(db, scripts, autocommit, schema)
               case Mode.Prod if hasDown && dbConfig.getAutoApply && dbConfig.getAutoApplyDowns =>
                 evolutions.evolve(db, scripts, autocommit, schema)
@@ -98,7 +105,7 @@ class ApplicationEvolutions(
 
 private object ApplicationEvolutions {
 
-  private val logger = Logger(classOf[ApplicationEvolutions])
+  private val logger = LoggerFactory.getLogger(classOf[ApplicationEvolutions])
 
   val SelectPlayEvolutionsLockSql =
     """

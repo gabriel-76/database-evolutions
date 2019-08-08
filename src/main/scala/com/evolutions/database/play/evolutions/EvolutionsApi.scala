@@ -12,6 +12,7 @@ import com.evolutions.database.exceptions.PlayException
 import com.evolutions.database.play._
 import com.evolutions.database.play.db.{Database, MyDatabase}
 import com.evolutions.database.play.util.Collections
+import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 
@@ -367,7 +368,7 @@ class DatabaseEvolutions(database: Database, schema: String = "") {
 
 private object DefaultEvolutionsApi {
 
-  val logger = Logger(classOf[DefaultEvolutionsApi])
+  val logger = LoggerFactory.getLogger(classOf[DefaultEvolutionsApi])
 
   val CreatePlayEvolutionsSql =
     """

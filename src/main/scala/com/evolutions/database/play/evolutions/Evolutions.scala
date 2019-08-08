@@ -10,7 +10,8 @@ import java.nio.file._
 
 import com.evolutions.database.play.Codecs.sha1
 import com.evolutions.database.play.db.Database
-import com.evolutions.database.play.{Environments, Logger, PlayIO}
+import com.evolutions.database.play.{Environments, PlayIO}
+import org.slf4j.LoggerFactory
 
 /**
  * An SQL evolution - database changes associated with a software version.
@@ -89,7 +90,7 @@ private[evolutions] object DatabaseUrlPatterns {
  * Defines Evolutions utilities functions.
  */
 object Evolutions {
-  private val logger = Logger(getClass)
+  private val logger = LoggerFactory.getLogger(getClass)
 
   /**
    * Default evolutions directory location.
