@@ -3,26 +3,26 @@ package com.evolutions.database.autoconfigure;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 /**
- * Configuration properties for Play database evolutions.
+ * Configuration properties for Database Evolutions.
  *
  * @author Gabriel Oliveira
  */
 @ConfigurationProperties(prefix = "play.evolutions")
 public class DatabaseEvolutionsProperties {
 
-    private boolean enable;
+    private boolean enable = true;
 
-    private String schema;
+    private String schema = "";
 
-    private boolean autocommit;
+    private boolean autocommit = true;
 
-    private boolean useLocks;
+    private boolean useLocks = false;
 
-    private boolean autoApply;
+    private boolean autoApply = false;
 
-    private boolean autoApplyDowns;
+    private boolean autoApplyDowns = false;
 
-    private boolean skipApplyDownsOnly;
+    private boolean skipApplyDownsOnly = false;
 
     public boolean isEnable() {
         return enable;

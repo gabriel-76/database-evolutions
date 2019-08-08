@@ -2,6 +2,7 @@ package com.evolutions.database.autoconfigure;
 
 import com.evolutions.database.play.evolutions.ApplicationEvolutions;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
@@ -12,6 +13,10 @@ import org.springframework.context.annotation.Configuration;
 
 import javax.sql.DataSource;
 
+/**
+ * Enable Auto-configuration for Database Evolutions
+ * @author Gabriel Oliveira
+ */
 @Configuration
 @ConditionalOnClass(DataSource.class)
 @ConditionalOnProperty(prefix = "play.evolutions", name = "enabled", matchIfMissing = true)
@@ -26,6 +31,7 @@ public class DatabaseEvolutionsAutoConfiguration {
     }
 
     @Bean
+    @ConditionalOnBean(DataSource.class)
     public void evoluttionsApply() {
         applicationEvolutions.start();
     }
