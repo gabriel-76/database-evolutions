@@ -24,6 +24,10 @@ public class DatabaseEvolutionsProperties {
 
     private boolean skipApplyDownsOnly = false;
 
+    private String mode = "dev";
+
+    private String path = "evolutions";
+
     public boolean isEnable() {
         return enable;
     }
@@ -78,5 +82,21 @@ public class DatabaseEvolutionsProperties {
 
     public void setSkipApplyDownsOnly(boolean skipApplyDownsOnly) {
         this.skipApplyDownsOnly = skipApplyDownsOnly;
+    }
+
+    public String getMode() {
+        return mode;
+    }
+
+    public void setMode(String mode) {
+        this.mode = mode;
+    }
+
+    public String getPath() {
+        return path;
+    }
+
+    public void setPath(String path) {
+        this.path = path;
     }
 }

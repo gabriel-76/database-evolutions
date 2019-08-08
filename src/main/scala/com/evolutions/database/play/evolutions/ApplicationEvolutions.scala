@@ -6,27 +6,27 @@ package com.evolutions.database.play.evolutions
 
 import java.sql.{Connection, SQLException, Statement}
 
-import com.evolutions.database.config.DbConfig
+import com.evolutions.database.autoconfigure.DatabaseEvolutionsProperties
 import com.evolutions.database.exceptions.PlayException
 import com.evolutions.database.play._
 import com.evolutions.database.play.db.{Database, MyDatabase}
 import com.evolutions.database.play.evolutions.DatabaseUrlPatterns._
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.stereotype.Service
+import org.springframework.stereotype.{Component, Service}
 
 import scala.util.control.Exception.ignoring
 
 /**
  * Run evolutions on application startup. Automatically runs on construction.
  */
-@Service
+@Component
 class ApplicationEvolutions(
     @Autowired private val reader: EvolutionsReader,
     @Autowired private val evolutions: EvolutionsApi,
     @Autowired private val dbApi: MyDatabase,
     @Autowired private val environments: Environments,
-    @Autowired private val config: DbConfig
+    @Autowired private val config: DatabaseEvolutionsProperties
 ) {
 
   private val logger = LoggerFactory.getLogger(classOf[ApplicationEvolutions])
@@ -46,6 +46,12 @@ class ApplicationEvolutions(
    */
   def start(): Unit = {
 
+    if(config.isEnable){
+      logger.info("Database evolutions is enable")
+    }else {
+      logger.info("Database evolutions is disable")
+    }
+
     dbApi
       .databases()
       .foreach(
@@ -64,15 +70,15 @@ class ApplicationEvolutions(
 
             environments.mode match {
               case Mode.Test => {
-                logger.warn("Apply evolutions in database")
+                logger.info(s"Apply evolutions in [$db]")
                 evolutions.evolve(db, scripts, autocommit, schema)
               }
               case Mode.Dev =>  {
-                logger.warn("Apply evolutions in database")
+                logger.info(s"Apply evolutions in [$db]")
                 evolutions.evolve(db, scripts, autocommit, schema)
               }
-              case Mode.Prod if !hasDown && dbConfig.getAutoApply => evolutions.evolve(db, scripts, autocommit, schema)
-              case Mode.Prod if hasDown && dbConfig.getAutoApply && dbConfig.getAutoApplyDowns =>
+              case Mode.Prod if !hasDown && dbConfig.isAutoApply => evolutions.evolve(db, scripts, autocommit, schema)
+              case Mode.Prod if hasDown && dbConfig.isAutoApply && dbConfig.isAutoApplyDowns =>
                 evolutions.evolve(db, scripts, autocommit, schema)
               case Mode.Prod if hasDown =>
                 logger.warn(
@@ -100,7 +106,7 @@ class ApplicationEvolutions(
       )
   }
 
-  start() // on construction
+//  start() // on construction
 }
 
 private object ApplicationEvolutions {
@@ -185,30 +191,30 @@ private object ApplicationEvolutions {
 
   def runEvolutions(
       database: Database,
-      dbConfig: DbConfig,
+      dbConfig: DatabaseEvolutionsProperties,
       evolutions: EvolutionsApi,
       reader: EvolutionsReader,
-      block: (String, DbConfig, String, Seq[Script], Boolean, Boolean) => Unit
+      block: (String, DatabaseEvolutionsProperties, String, Seq[Script], Boolean, Boolean) => Unit
   ): Unit = {
     val db       = database.name
-    if (dbConfig.getEnable) {
+    if (dbConfig.isEnable) {
       withLock(database, dbConfig) {
         val schema     = dbConfig.getSchema
-        val autocommit = dbConfig.getAutocommit
+        val autocommit = dbConfig.isAutocommit
 
         val scripts   = evolutions.scripts(db, reader, schema)
         val hasDown   = scripts.exists(_.isInstanceOf[DownScript])
         val onlyDowns = scripts.forall(_.isInstanceOf[DownScript])
 
-        if (scripts.nonEmpty && !(onlyDowns && dbConfig.getSkipApplyDownsOnly)) {
+        if (scripts.nonEmpty && !(onlyDowns && dbConfig.isSkipApplyDownsOnly)) {
           block.apply(db, dbConfig, schema, scripts, hasDown, autocommit)
         }
       }
     }
   }
 
-  private def withLock(db: Database, dbConfig: DbConfig)(block: => Unit): Unit = {
-    if (dbConfig.getUseLocks) {
+  private def withLock(db: Database, dbConfig: DatabaseEvolutionsProperties)(block: => Unit): Unit = {
+    if (dbConfig.isUseLocks) {
       val ds  = db.dataSource
       val url = db.url
       val c   = ds.getConnection
@@ -230,7 +236,7 @@ private object ApplicationEvolutions {
       url: String,
       c: Connection,
       s: Statement,
-      dbConfig: DbConfig
+      dbConfig: DatabaseEvolutionsProperties
   ): Unit = {
     val (selectScript, createScript, insertScript) = url match {
       case OracleJdbcUrl() =>
@@ -255,7 +261,7 @@ private object ApplicationEvolutions {
       url: String,
       c: Connection,
       s: Statement,
-      dbConfig: DbConfig,
+      dbConfig: DatabaseEvolutionsProperties,
       attempts: Int = 5
   ): Unit = {
     val lockScripts = url match {

@@ -2,7 +2,7 @@ package com.evolutions.database.play
 
 import java.io.{File, InputStream}
 
-import com.evolutions.database.config.Config
+import com.evolutions.database.autoconfigure.DatabaseEvolutionsProperties
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 
@@ -16,7 +16,7 @@ import org.springframework.stereotype.Service
  * @param mode The mode of the application.
  */
 @Service
-case class Environments (@Autowired private val config: Config) {
+case class Environments (@Autowired private val config: DatabaseEvolutionsProperties) {
 
   val rootPath: File = new File("")
   val classLoader: ClassLoader = getClass.getClassLoader

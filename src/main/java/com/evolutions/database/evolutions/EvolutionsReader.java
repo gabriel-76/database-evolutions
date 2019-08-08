@@ -1,6 +1,6 @@
 package com.evolutions.database.evolutions;
 
-import com.evolutions.database.config.Config;
+import com.evolutions.database.autoconfigure.DatabaseEvolutionsProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
@@ -8,6 +8,7 @@ import org.springframework.core.io.support.ResourcePatternUtils;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Arrays;
 import java.util.Objects;
 import java.util.stream.Stream;
@@ -22,7 +23,7 @@ public class EvolutionsReader {
     private ResourceLoader resourceLoader;
 
     @Autowired
-    private Config config;
+    private DatabaseEvolutionsProperties config;
 
     private Stream<Resource> loadResources(String pattern) throws IOException {
         return Arrays.stream(ResourcePatternUtils.getResourcePatternResolver(resourceLoader).getResources(pattern));
@@ -38,4 +39,10 @@ public class EvolutionsReader {
         return Objects.requireNonNull(resource.getFilename()).split("\\.sql")[0];
     }
 
+
+    private InputStream load(Integer revision) throws IOException {
+        var array  = ResourcePatternUtils.getResourcePatternResolver(resourceLoader)
+                .getResources(String.format("classpath*:%1$s/%2$s.sql", config.getPath(), revision.toString()));
+        return array.length > 0 ? array[0].getInputStream() : null;
+    }
 }

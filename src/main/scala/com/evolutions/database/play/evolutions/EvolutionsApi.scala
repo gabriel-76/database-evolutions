@@ -520,37 +520,41 @@ abstract class ResourceEvolutionsReader extends EvolutionsReader {
  * Read evolution files from the application environment.
  */
 @Service
-class EnvironmentEvolutionsReader (@Autowired private val environment: Environments) extends ResourceEvolutionsReader {
+class EnvironmentEvolutionsReader (@Autowired private val environment: Environments, @Autowired private val reader: Reader) extends ResourceEvolutionsReader {
 
   import DefaultEvolutionsApi._
 
+//  def loadResource(db: String, revision: Int): Option[InputStream] = {
+//    @tailrec def findPaddedRevisionResource(paddedRevision: String, uri: Option[URI]): Option[InputStream] = {
+//      if (paddedRevision.length > 15) {
+//        uri.map(u => u.toURL().openStream()) // Revision string has reached max padding
+//      } else {
+//
+//        val evolution = {
+//          // First try a file on the filesystem
+//          val filename = Evolutions.fileName(db, paddedRevision)
+//          environment.getExistingFile(filename).map(_.toURI)
+//        }.orElse {
+//          // If file was not found, try a resource on the classpath
+//          val resourceName = Evolutions.resourceName(db, paddedRevision)
+//          environment.resource(resourceName).map(url => url.toURI)
+//        }
+//
+//        for {
+//          u <- uri
+//          e <- evolution
+//        } yield logger.warn(
+//          s"Ignoring evolution script ${e.toString.substring(e.toString.lastIndexOf('/') + 1)}, using ${u.toString
+//            .substring(u.toString.lastIndexOf('/') + 1)} instead already"
+//        )
+//        findPaddedRevisionResource("0" + paddedRevision, uri.orElse(evolution))
+//      }
+//    }
+//    findPaddedRevisionResource(revision.toString, None)
+//  }
+
   def loadResource(db: String, revision: Int): Option[InputStream] = {
-    @tailrec def findPaddedRevisionResource(paddedRevision: String, uri: Option[URI]): Option[InputStream] = {
-      if (paddedRevision.length > 15) {
-        uri.map(u => u.toURL().openStream()) // Revision string has reached max padding
-      } else {
-
-        val evolution = {
-          // First try a file on the filesystem
-          val filename = Evolutions.fileName(db, paddedRevision)
-          environment.getExistingFile(filename).map(_.toURI)
-        }.orElse {
-          // If file was not found, try a resource on the classpath
-          val resourceName = Evolutions.resourceName(db, paddedRevision)
-          environment.resource(resourceName).map(url => url.toURI)
-        }
-
-        for {
-          u <- uri
-          e <- evolution
-        } yield logger.warn(
-          s"Ignoring evolution script ${e.toString.substring(e.toString.lastIndexOf('/') + 1)}, using ${u.toString
-            .substring(u.toString.lastIndexOf('/') + 1)} instead already"
-        )
-        findPaddedRevisionResource("0" + paddedRevision, uri.orElse(evolution))
-      }
-    }
-    findPaddedRevisionResource(revision.toString, None)
+    Option(reader.load(revision))
   }
 }
 
