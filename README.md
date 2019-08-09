@@ -7,7 +7,7 @@ Versioning and evolution of source code have evolved a lot in recent years and t
 
 ### Maven
 
-Download jar `database-evolutions.jar` and add to your project `pom.xml`.
+Download jar [database-evolutions.jar](https://github.com/gabriel-76/database-evolutions/releases/download/0.1/database-evolutions.jar) and add to your project `pom.xml`.
 
 ```xml
 <dependency>
@@ -19,7 +19,7 @@ Download jar `database-evolutions.jar` and add to your project `pom.xml`.
 ```
 ### Gradle
 
-Download jar `database-evolutions.jar` and add to your project `build.gradle`.
+Download jar [database-evolutions.jar](https://github.com/gabriel-76/database-evolutions/releases/download/0.1/database-evolutions.jar) and add to your project `build.gradle`.
 
 ```groovy
 dependencies {
