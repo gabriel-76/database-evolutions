@@ -27,12 +27,16 @@ dependencies {
 }
 ```
 ### Spring 
+
 Show Spring Boot how to find your configuration classes.
+
 ```java
 @SpringBootApplication(scanBasePackages = {"com.evolutions.database.*"})
 ```
 #### Evolutions Configuration
-Add configuration variables to the application.properties of your Spring Boot project.
+
+Add configuration variables to the `application.properties` of your Spring Boot project.
+
 ```properties
 # Whether evolutions are enabled  
 play.evolutions.enabled = true  
@@ -74,6 +78,7 @@ Spring Database Evolutions works with `java` version 8 or later
 ```
 java8+
 ```
+
 ### Managing database evolutions ([Taken from Play Framework](https://www.playframework.com/documentation/2.7.x/Evolutions))
 
 #### Evolutions scripts
