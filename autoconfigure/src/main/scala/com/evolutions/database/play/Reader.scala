@@ -1,6 +1,6 @@
 package com.evolutions.database.play
 
-import java.io.{IOException, InputStream}
+import java.io.{IOException}
 import java.lang.Integer.valueOf
 import java.util.Objects
 
@@ -29,7 +29,7 @@ class Reader(@Autowired private val resourceLoader: ResourceLoader, @Autowired p
   def load(revision: Integer) = {
     val array = ResourcePatternUtils.getResourcePatternResolver(resourceLoader)
       .getResources(String.format("classpath*:%1$s/%2$s.sql", config.getPath, revision.toString))
-    if (array.length > 0) array(0).getInputStream
+    if (array.nonEmpty) array(0).getInputStream
     else null
   }
 }

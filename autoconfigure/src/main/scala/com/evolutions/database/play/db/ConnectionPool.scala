@@ -18,7 +18,7 @@ trait ConnectionPool {
    * @param name the database name
    * @return a data source backed by a connection pool
    */
-  def create(name: String, dbConfig: DatabaseConfig): DataSource
+  def create(name: String): DataSource
 
   /**
    * Close the given data source.

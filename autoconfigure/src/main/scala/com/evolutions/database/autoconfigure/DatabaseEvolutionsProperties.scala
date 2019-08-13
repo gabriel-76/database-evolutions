@@ -8,7 +8,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties
  * @author Gabriel Oliveira
  */
 @ConfigurationProperties(prefix = "play.evolutions")
-class DatabaseEvolutionsProperties {
+class DatabaseEvolutionsProperties extends DatabaseProperties {
 
   private var enable = true
 
@@ -81,5 +81,27 @@ class DatabaseEvolutionsProperties {
   def setPath(path: String): Unit = {
     this.path = path
   }
+
+}
+
+trait DatabaseProperties {
+
+  def isEnable: Boolean
+
+  def getSchema: String
+
+  def isAutocommit: Boolean
+
+  def isUseLocks: Boolean
+
+  def isAutoApply: Boolean
+
+  def isAutoApplyDowns: Boolean
+
+  def isSkipApplyDownsOnly: Boolean
+
+  def getMode: String
+
+  def getPath: String
 
 }
