@@ -4,6 +4,7 @@ import com.evolutions.database.play.evolutions.ApplicationEvolutions;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.boot.autoconfigure.jdbc.JdbcTemplateAutoConfiguration;
 import org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfiguration;
@@ -19,6 +20,7 @@ import javax.sql.DataSource;
  */
 @Configuration
 @ConditionalOnClass(DataSource.class)
+@ConditionalOnProperty(prefix = "play.evolutions", name = "enabled" , havingValue = "true")
 @EnableConfigurationProperties(DatabaseEvolutionsProperties.class)
 @AutoConfigureAfter({ DataSourceAutoConfiguration.class, JdbcTemplateAutoConfiguration.class,
         HibernateJpaAutoConfiguration.class })

@@ -46,12 +46,6 @@ class ApplicationEvolutions(
    */
   def start(): Unit = {
 
-    if(config.isEnable){
-      logger.info("Database evolutions is enable")
-    }else {
-      logger.info("Database evolutions is disable")
-    }
-
     dbApi
       .databases()
       .foreach(
