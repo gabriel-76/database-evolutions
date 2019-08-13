@@ -1,6 +1,10 @@
+/*
+ * Copyright (C) 2009-2019 Lightbend Inc. <https://www.lightbend.com>
+ */
+
 package com.evolutions.database.play.db
 
-import com.evolutions.database.play.{Environments, Mode}
+import com.evolutions.database.play.{Mode}
 import javax.sql.DataSource
 
 /**
@@ -30,7 +34,7 @@ object ConnectionPool {
   /**
    * Load a connection pool from a configured connection pool
    */
-  def fromConfig(config: String, environments: Environments, default: ConnectionPool): ConnectionPool = {
+  def fromConfig(config: String, default: ConnectionPool): ConnectionPool = {
     config match {
       case "default"  => default
     }

@@ -520,7 +520,7 @@ abstract class ResourceEvolutionsReader extends EvolutionsReader {
  * Read evolution files from the application environment.
  */
 @Service
-class EnvironmentEvolutionsReader (@Autowired private val environment: Environments, @Autowired private val reader: Reader) extends ResourceEvolutionsReader {
+class EnvironmentEvolutionsReader (@Autowired private val reader: Reader) extends ResourceEvolutionsReader {
 
   import DefaultEvolutionsApi._
 

@@ -25,7 +25,6 @@ class ApplicationEvolutions(
     @Autowired private val reader: EvolutionsReader,
     @Autowired private val evolutions: EvolutionsApi,
     @Autowired private val dbApi: MyDatabase,
-    @Autowired private val environments: Environments,
     @Autowired private val config: DatabaseEvolutionsProperties
 ) {
 
@@ -62,7 +61,7 @@ class ApplicationEvolutions(
               throw InvalidDatabaseRevision(db, toHumanReadableScript(scripts))
             }
 
-            environments.mode match {
+            com.evolutions.database.Mode.valueOf(config.getMode.toUpperCase).asScala() match {
               case Mode.Test => {
                 logger.info(s"Apply evolutions in [$db]")
                 evolutions.evolve(db, scripts, autocommit, schema)

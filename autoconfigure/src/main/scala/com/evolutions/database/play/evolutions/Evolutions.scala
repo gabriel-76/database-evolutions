@@ -10,7 +10,7 @@ import java.nio.file._
 
 import com.evolutions.database.play.Codecs.sha1
 import com.evolutions.database.play.db.Database
-import com.evolutions.database.play.{Environments, PlayIO}
+import com.evolutions.database.play.{PlayIO}
 import org.slf4j.LoggerFactory
 
 /**
@@ -120,21 +120,22 @@ object Evolutions {
       comment: String = "Generated",
       ups: String,
       downs: String
-  )(implicit environment: Environments): Unit = {
-    val evolutions = environment.getFile(fileName(db, revision))
-    Files.createDirectory(environment.getFile(directoryName(db)).toPath)
-    writeFileIfChanged(
-      evolutions,
-      """|-- %s
-         |
-         |-- !Ups
-         |%s
-         |
-         |-- !Downs
-         |%s
-         |
-         |""".stripMargin.format(comment, ups, downs)
-    )
+  ): Unit = {
+//  )(implicit environment: Environments): Unit = {
+//    val evolutions = environment.getFile(fileName(db, revision))
+//    Files.createDirectory(environment.getFile(directoryName(db)).toPath)
+//    writeFileIfChanged(
+//      evolutions,
+//      """|-- %s
+//         |
+//         |-- !Ups
+//         |%s
+//         |
+//         |-- !Downs
+//         |%s
+//         |
+//         |""".stripMargin.format(comment, ups, downs)
+//    )
   }
 
   private def writeFileIfChanged(path: File, content: String): Unit = {

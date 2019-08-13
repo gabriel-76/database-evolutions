@@ -1,6 +1,8 @@
-package com.evolutions.database.play.db
+/*
+ * Copyright (C) 2009-2019 Lightbend Inc. <https://www.lightbend.com>
+ */
 
-import com.evolutions.database.play.Environments
+package com.evolutions.database.play.db
 
 /**
  * The generic database configuration.
@@ -23,7 +25,7 @@ case class DatabaseConfig(
 object DatabaseConfig {
 
 //  def fromConfig(config: Configuration, environments: Environments) = {
-  def fromConfig(environments: Environments) = {
+  def fromConfig() = {
 
 //    val driver          = config.get[Option[String]]("driver")
 //    val (url, userPass) = ConnectionPool.extractUrl(config.get[Option[String]]("url"), environment.mode)
