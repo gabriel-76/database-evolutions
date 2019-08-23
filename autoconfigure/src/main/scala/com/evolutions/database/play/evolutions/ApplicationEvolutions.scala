@@ -6,14 +6,14 @@ package com.evolutions.database.play.evolutions
 
 import java.sql.{Connection, SQLException, Statement}
 
-import com.evolutions.database.autoconfigure.DatabaseEvolutionsProperties
+import com.evolutions.database.autoconfigure.DatabaseEvolutionsConf
 import com.evolutions.database.exceptions.PlayException
 import com.evolutions.database.play._
 import com.evolutions.database.play.db.{Database, MyDatabase}
 import com.evolutions.database.play.evolutions.DatabaseUrlPatterns._
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.stereotype.{Component, Service}
+import org.springframework.stereotype.Component
 
 import scala.util.control.Exception.ignoring
 
@@ -22,10 +22,10 @@ import scala.util.control.Exception.ignoring
  */
 @Component
 class ApplicationEvolutions(
-    @Autowired private val reader: EvolutionsReader,
-    @Autowired private val evolutions: EvolutionsApi,
-    @Autowired private val dbApi: MyDatabase,
-    @Autowired private val config: DatabaseEvolutionsProperties
+    reader: EvolutionsReader,
+    evolutions: EvolutionsApi,
+    dbApi: MyDatabase,
+    config: DatabaseEvolutionsConf
 ) {
 
   private val logger = LoggerFactory.getLogger(classOf[ApplicationEvolutions])
@@ -183,11 +183,11 @@ private object ApplicationEvolutions {
     )
 
   def runEvolutions(
-      database: Database,
-      dbConfig: DatabaseEvolutionsProperties,
-      evolutions: EvolutionsApi,
-      reader: EvolutionsReader,
-      block: (String, DatabaseEvolutionsProperties, String, Seq[Script], Boolean, Boolean) => Unit
+                     database: Database,
+                     dbConfig: DatabaseEvolutionsConf,
+                     evolutions: EvolutionsApi,
+                     reader: EvolutionsReader,
+                     block: (String, DatabaseEvolutionsConf, String, Seq[Script], Boolean, Boolean) => Unit
   ): Unit = {
     val db       = database.name
     if (dbConfig.isEnable) {
@@ -206,7 +206,7 @@ private object ApplicationEvolutions {
     }
   }
 
-  private def withLock(db: Database, dbConfig: DatabaseEvolutionsProperties)(block: => Unit): Unit = {
+  private def withLock(db: Database, dbConfig: DatabaseEvolutionsConf)(block: => Unit): Unit = {
     if (dbConfig.isUseLocks) {
       val ds  = db.dataSource
       val url = db.url
@@ -229,7 +229,7 @@ private object ApplicationEvolutions {
       url: String,
       c: Connection,
       s: Statement,
-      dbConfig: DatabaseEvolutionsProperties
+      dbConfig: DatabaseEvolutionsConf
   ): Unit = {
     val (selectScript, createScript, insertScript) = url match {
       case OracleJdbcUrl() =>
@@ -251,11 +251,11 @@ private object ApplicationEvolutions {
   }
 
   private def lock(
-      url: String,
-      c: Connection,
-      s: Statement,
-      dbConfig: DatabaseEvolutionsProperties,
-      attempts: Int = 5
+                    url: String,
+                    c: Connection,
+                    s: Statement,
+                    dbConfig: DatabaseEvolutionsConf,
+                    attempts: Int = 5
   ): Unit = {
     val lockScripts = url match {
       case MysqlJdbcUrl(_) => lockPlayEvolutionsLockMysqlSqls
@@ -308,7 +308,6 @@ trait EvolutionsDatasourceConfig {
 /**
  * Evolutions configuration for all datasources.
  */
-@Service
 trait EvolutionsConfig {
   def forDatasource(db: String): EvolutionsDatasourceConfig
 }
@@ -337,169 +336,72 @@ class DefaultEvolutionsConfig(
 }
 
 /**
- * A provider that creates an EvolutionsConfig from the play.api.Configuration.
- */
-//@Singleton
-//class DefaultEvolutionsConfigParser () {
-//
-//  private val logger = Logger(classOf[DefaultEvolutionsConfigParser])
-//
-//  def get = parse()
-//
-//  def parse(): EvolutionsConfig = {
-//
-//    // Find all the defined datasources, both using the old format, and the new format
-//    def loadDatasources(path: String) = {
-//      if (rootConfig.underlying.hasPath(path)) {
-//        rootConfig.get[Configuration](path).subKeys
-//      } else {
-//        Set.empty[String]
-//      }
-//    }
-//    val datasources = config.get[Configuration]("db").subKeys ++
-//      loadDatasources("applyEvolutions") ++
-//      loadDatasources("applyDownEvolutions")
-//
-//    // Load defaults
-//    val enabled            = config.get[Boolean]("enabled")
-//    val schema             = config.get[String]("schema")
-//    val autocommit         = getDeprecated[Boolean](config, "play.evolutions", "autocommit", "evolutions.autocommit")
-//    val useLocks           = getDeprecated[Boolean](config, "play.evolutions", "useLocks", "evolutions.use.locks")
-//    val autoApply          = config.get[Boolean]("autoApply")
-//    val autoApplyDowns     = config.get[Boolean]("autoApplyDowns")
-//    val skipApplyDownsOnly = config.get[Boolean]("skipApplyDownsOnly")
-//
-//    val defaultConfig = new DefaultEvolutionsDatasourceConfig(
-//      enabled,
-//      schema,
-//      autocommit,
-//      useLocks,
-//      autoApply,
-//      autoApplyDowns,
-//      skipApplyDownsOnly
-//    )
-//
-//    // Load config specific to datasources
-//    // Since not all the datasources will necessarily appear in the db map, because some will come from deprecated
-//    // configuration, we create a map of them to the default config, and then override any of them with the ones
-//    // from db.
-//    val datasourceConfigMap = datasources.map(_ -> config).toMap ++ config.getPrototypedMap("db", "")
-//
-//    val datasourceConfig: Map[String, DefaultEvolutionsDatasourceConfig] =
-//      datasourceConfigMap.map {
-//        case (datasource, dsConfig) =>
-//          val enabled    = dsConfig.get[Boolean]("enabled")
-//          val schema     = dsConfig.get[String]("schema")
-//          val autocommit = dsConfig.get[Boolean]("autocommit")
-//          val useLocks   = dsConfig.get[Boolean]("useLocks")
-//          val autoApply = getDeprecated[Boolean](
-//            dsConfig,
-//            s"play.evolutions.db.$datasource",
-//            "autoApply",
-//            s"applyEvolutions.$datasource"
-//          )
-//          val autoApplyDowns = getDeprecated[Boolean](
-//            dsConfig,
-//            s"play.evolutions.db.$datasource",
-//            "autoApplyDowns",
-//            s"applyDownEvolutions.$datasource"
-//          )
-//          val skipApplyDownsOnly = getDeprecated[Boolean](
-//            dsConfig,
-//            s"play.evolutions.db.$datasource",
-//            "skipApplyDownsOnly",
-//            s"skipApplyDownsOnly.$datasource"
-//          )
-//          datasource -> new DefaultEvolutionsDatasourceConfig(
-//            enabled,
-//            schema,
-//            autocommit,
-//            useLocks,
-//            autoApply,
-//            autoApplyDowns,
-//            skipApplyDownsOnly
-//          )
-//      }
-//
-//    new DefaultEvolutionsConfig(defaultConfig, datasourceConfig)
-//  }
-//
-//  /**
-//   * Convert configuration sections of key-boolean pairs to a set of enabled keys.
-//   */
-//  def enabledKeys(configuration: Configuration, section: String): Set[String] = {
-//    configuration.getOptional[Configuration](section).fold(Set.empty[String]) { conf =>
-//      conf.keys.filter(conf.getOptional[Boolean](_).getOrElse(false))
-//    }
-//  }
-//}
-
-/**
  * Web command handler for applying evolutions on application start.
  */
-//@Service
-//class EvolutionsWebCommands(
-//    @Autowired private val dbApi: MyDatabase,
-//    @Autowired private val evolutions: EvolutionsApi,
-//    @Autowired private val reader: EvolutionsReader
-//) {
-//  var checkedAlready = false
-//
-//  val applyEvolutions   = """/@evolutions/apply/([a-zA-Z0-9_-]+)""".r
-//  val resolveEvolutions = """/@evolutions/resolve/([a-zA-Z0-9_-]+)/([0-9]+)""".r
-//
-//  lazy val redirectUrl = ""
-//
-//  // Regex removes all parent directories from request path
-//  "request".replaceFirst("^((?!/@evolutions).)*(/@evolutions.*$)", "$2") match {
-//
-//    case applyEvolutions(db) => {
-//      Some {
-////        val scripts = evolutions.scripts(db, reader, config.forDatasource(db).schema)
-////        evolutions.evolve(db, scripts, config.forDatasource(db).autocommit, config.forDatasource(db).schema)
-//      }
-//    }
-//
-//    case resolveEvolutions(db, rev) => {
-//      Some {
-////        evolutions.resolve(db, rev.toInt, config.forDatasource(db).schema)
-//      }
-//    }
-//
-////    case _ => {
-////      synchronized {
-////        var autoApplyCount = 0
-////        if (!checkedAlready) {
-////          dbApi
-////            .databases()
-////            .foreach(
-////              ApplicationEvolutions.runEvolutions(
-////                _,
-////                config,
-////                evolutions,
-////                reader,
-////                (db, dbConfig, schema, scripts, hasDown, autocommit) => {
-////                  import Evolutions.toHumanReadableScript
-////
-////                  if (dbConfig.autoApply) {
-////                    evolutions.evolve(db, scripts, autocommit, schema)
-////                    autoApplyCount += 1
-////                  } else {
-////                    throw InvalidDatabaseRevision(db, toHumanReadableScript(scripts))
-////                  }
-////                }
-////              )
-////            )
-////          checkedAlready = true
-////          if (autoApplyCount > 0) {
-//////            buildLink.forceReload()
-////          }
-////        }
-////      }
-////      None
-////    }
-//  }
-//}
+//@Component
+class EvolutionsWebCommands(
+                             @Autowired private val dbApi: MyDatabase,
+                             @Autowired private val evolutions: EvolutionsApi,
+                             @Autowired private val reader: EvolutionsReader,
+                             @Autowired private val config: DatabaseEvolutionsConf,
+) {
+  var checkedAlready = false
+
+  val applyEvolutions   = """/@evolutions/apply/([a-zA-Z0-9_-]+)""".r
+  val resolveEvolutions = """/@evolutions/resolve/([a-zA-Z0-9_-]+)/([0-9]+)""".r
+
+  lazy val redirectUrl = ""
+
+  // Regex removes all parent directories from request path
+  "".replaceFirst("^((?!/@evolutions).)*(/@evolutions.*$)", "$2") match {
+
+    case applyEvolutions(db) => {
+      Some {
+        val scripts = evolutions.scripts(db, reader, config.getSchema)
+        evolutions.evolve(db, scripts, config.isAutocommit, config.getSchema)
+      }
+    }
+
+    case resolveEvolutions(db, rev) => {
+      Some {
+        evolutions.resolve(db, rev.toInt, config.getSchema)
+      }
+    }
+
+    case _ => {
+      synchronized {
+        var autoApplyCount = 0
+        if (!checkedAlready) {
+          dbApi
+            .databases()
+            .foreach(
+              ApplicationEvolutions.runEvolutions(
+                _,
+                config,
+                evolutions,
+                reader,
+                (db, dbConfig, schema, scripts, hasDown, autocommit) => {
+                  import Evolutions.toHumanReadableScript
+
+                  if (dbConfig.isAutoApply) {
+                    evolutions.evolve(db, scripts, autocommit, schema)
+                    autoApplyCount += 1
+                  } else {
+                    throw InvalidDatabaseRevision(db, toHumanReadableScript(scripts))
+                  }
+                }
+              )
+            )
+          checkedAlready = true
+          if (autoApplyCount > 0) {
+//            buildLink.forceReload()
+          }
+        }
+      }
+      None
+    }
+  }
+}
 
 /**
  * Exception thrown when the database is not up to date.

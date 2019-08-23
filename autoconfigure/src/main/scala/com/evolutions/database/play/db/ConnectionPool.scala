@@ -4,7 +4,7 @@
 
 package com.evolutions.database.play.db
 
-import com.evolutions.database.play.{Mode}
+import com.evolutions.database.play.Mode
 import javax.sql.DataSource
 
 /**

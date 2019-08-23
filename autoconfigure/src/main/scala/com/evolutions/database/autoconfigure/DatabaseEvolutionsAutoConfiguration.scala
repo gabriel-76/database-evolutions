@@ -18,13 +18,21 @@ import org.springframework.context.annotation.{Bean, Configuration}
 @Configuration
 @ConditionalOnClass(Array(classOf[DataSource]))
 @ConditionalOnProperty(prefix = "play.evolutions", name = Array("enabled"), havingValue = "true")
-@EnableConfigurationProperties(Array(classOf[DatabaseEvolutionsProperties]))
+@EnableConfigurationProperties(Array(classOf[DatabaseEvolutionsConf]))
 @AutoConfigureAfter(Array(classOf[DataSourceAutoConfiguration], classOf[JdbcTemplateAutoConfiguration],
   classOf[HibernateJpaAutoConfiguration]))
-class DatabaseEvolutionsAutoConfiguration(@Autowired private val applicationEvolutions: ApplicationEvolutions) {
+class DatabaseEvolutionsAutoConfiguration(
+   @Autowired private val applicationEvolutions: ApplicationEvolutions,
+   @Autowired private val dataSource: DataSource
+) {
 
   @Bean
-  @ConditionalOnBean(Array(classOf[DataSource]))
+  def dataSources(): Seq[DataSource] = {
+    Seq(dataSource)
+  }
+
+  @Bean
+  @ConditionalOnBean(name = Array("dataSources"))
   def evolutionsApply(): Unit = {
     applicationEvolutions.start()
   }

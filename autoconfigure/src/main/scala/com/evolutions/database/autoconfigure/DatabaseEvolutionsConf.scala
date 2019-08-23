@@ -8,7 +8,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties
  * @author Gabriel Oliveira
  */
 @ConfigurationProperties(prefix = "play.evolutions")
-class DatabaseEvolutionsProperties extends DatabaseProperties {
+class DatabaseEvolutionsConf extends DatabaseConf {
 
   private var enable = true
 
@@ -84,7 +84,7 @@ class DatabaseEvolutionsProperties extends DatabaseProperties {
 
 }
 
-trait DatabaseProperties {
+trait DatabaseConf {
 
   def isEnable: Boolean
 

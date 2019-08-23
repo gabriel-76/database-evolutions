@@ -5,9 +5,9 @@
 package com.evolutions.database.play.evolutions
 
 import java.io.{File, InputStream}
-import java.net.URI
 import java.sql._
 
+import com.evolutions.database.autoconfigure.DatabaseConf
 import com.evolutions.database.exceptions.PlayException
 import com.evolutions.database.play._
 import com.evolutions.database.play.db.{Database, MyDatabase}
@@ -16,7 +16,6 @@ import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 
-import scala.annotation.tailrec
 import scala.io.Codec
 import scala.util.control.NonFatal
 
@@ -520,9 +519,7 @@ abstract class ResourceEvolutionsReader extends EvolutionsReader {
  * Read evolution files from the application environment.
  */
 @Service
-class EnvironmentEvolutionsReader (@Autowired private val reader: Reader) extends ResourceEvolutionsReader {
-
-  import DefaultEvolutionsApi._
+class EnvironmentEvolutionsReader (@Autowired private val reader: Reader, @Autowired private val conf: DatabaseConf) extends ResourceEvolutionsReader {
 
 //  def loadResource(db: String, revision: Int): Option[InputStream] = {
 //    @tailrec def findPaddedRevisionResource(paddedRevision: String, uri: Option[URI]): Option[InputStream] = {
@@ -554,7 +551,7 @@ class EnvironmentEvolutionsReader (@Autowired private val reader: Reader) extend
 //  }
 
   def loadResource(db: String, revision: Int): Option[InputStream] = {
-    Option(reader.load(revision))
+    Option(reader.load(revision, conf))
   }
 }
 
