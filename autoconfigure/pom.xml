@@ -13,7 +13,7 @@
 
     <properties>
         <java.version>12</java.version>
-        <scala.version>2.13.0</scala.version>
+        <scala.version>2.13.9</scala.version>
     </properties>
 
     <dependencies>
